@@ -32,12 +32,9 @@ class Artist
   end
 
   def self.most_prolific
-    experience = @@artists.map { |artist| artist.years_experience }
-    indexed_paintings = @@artists.map { |artist| Painting.all.select { |painting| painting.artist == artist } }
-    painting_count = indexed_paintings.map { |array| array.count }
-    values = painting_count.each_with_index{ |number, index| number.to_f / experience[index] }
-    the_index = values.index(values.max)
-    @@artists[the_index]
+    self.all.max_by do |artist|
+      artist.paintings.length / artist.years_experience
+    end
   end
 
   def create_painting(title, price, gallery)
